@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>I ❤️ U Animation</title>
+  <title>I Love You Animation</title>
   <style>
     body {
       margin: 0;
@@ -11,70 +10,120 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #f5c542;
-      font-family: Arial, sans-serif;
+      background: #fce4ec;
+      font-family: "Poppins", sans-serif;
       overflow: hidden;
     }
-    .text {
-      font-size: 5rem;
+    h1 {
+      position: absolute;
+      top: 10%;
+      font-size: 3rem;
       font-weight: bold;
-      color: #4a148c;
+      color: #880e4f;
+      animation: fadeIn 2s ease forwards;
+    }
+    .container {
       display: flex;
       align-items: center;
-      gap: 20px;
+      justify-content: center;
+      gap: 30px;
+    }
+    .line {
+      width: 8px;
+      height: 120px;
+      background: #ad1457;
+      border-radius: 8px;
+      transform: scaleY(0);
+      animation: grow 1.2s ease forwards;
     }
     .heart {
-      font-size: 5rem;
+      font-size: 4rem;
       color: red;
+      opacity: 0;
+      transform: scale(0);
+    }
+
+    /* Animations */
+    @keyframes grow {
+      to {
+        transform: scaleY(1);
+      }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <div class="text">
-    I <span class="heart">❤</span> U
+  <h1>I Love You ❤️</h1>
+  <div class="container">
+    <div class="line left"></div>
+    <span class="heart">❤</span>
+    <div class="line right"></div>
   </div>
 
-  <!-- Mo.js library -->
+  <!-- Mo.js -->
   <script src="https://cdn.jsdelivr.net/npm/@mojs/core"></script>
   <script>
     const heart = document.querySelector(".heart");
+    const leftLine = document.querySelector(".left");
+    const rightLine = document.querySelector(".right");
 
-    // Burst particles
+    // Step 1: Animate lines inward
+    setTimeout(() => {
+      leftLine.style.transition = "transform 1s ease";
+      rightLine.style.transition = "transform 1s ease";
+      leftLine.style.transform = "translateX(60px)";
+      rightLine.style.transform = "translateX(-60px)";
+    }, 1500);
+
+    // Step 2: Reveal heart
+    setTimeout(() => {
+      heart.style.transition = "all 0.8s ease";
+      heart.style.opacity = 1;
+      heart.style.transform = "scale(1.2)";
+    }, 2600);
+
+    // Step 3: Heartbeat animation
+    function heartbeat() {
+      new mojs.Html({
+        el: heart,
+        scale: { 1: 1.5 },
+        duration: 500,
+        easing: "sin.inout",
+        onComplete: () => {
+          new mojs.Html({
+            el: heart,
+            scale: { 1.5: 1 },
+            duration: 500,
+            easing: "sin.inout"
+          }).play();
+        }
+      }).play();
+    }
+
+    // Step 4: Heart burst
     const burst = new mojs.Burst({
       parent: heart,
-      radius: { 30: 100 },
-      count: 12,
+      radius: { 30: 120 },
+      count: 20,
       children: {
         shape: "circle",
-        radius: { 5: 0 },
+        radius: { 8: 0 },
         fill: [ "red", "deeppink", "purple" ],
         duration: 1500,
         easing: "sin.out"
       }
     });
 
-    // Heartbeat function
-    function heartbeat() {
-      new mojs.Html({
-        el: heart,
-        scale: { 1: 1.5 },
-        duration: 400,
-        easing: "sin.inout",
-        onComplete: () => {
-          new mojs.Html({
-            el: heart,
-            scale: { 1.5: 1 },
-            duration: 400,
-            easing: "sin.inout"
-          }).play();
-        }
-      }).play();
-
+    setTimeout(() => {
+      heartbeat();
       burst.replay();
-    }
+    }, 4000);
 
-    // Run heartbeat every 1.5s
-    setInterval(heartbeat, 1500);
+    // Optional: Repeat heartbeat every few seconds
+    setInterval(heartbeat, 2500);
   </script>
 </body>
 </html>
