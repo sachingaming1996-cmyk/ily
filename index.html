@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>I ❤️ U Animation</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f5c542;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    .text {
+      font-size: 5rem;
+      font-weight: bold;
+      color: #4a148c;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .heart {
+      font-size: 5rem;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="text">
+    I <span class="heart">❤</span> U
+  </div>
+
+  <!-- Mo.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/@mojs/core"></script>
+  <script>
+    const heart = document.querySelector(".heart");
+
+    // Burst particles
+    const burst = new mojs.Burst({
+      parent: heart,
+      radius: { 30: 100 },
+      count: 12,
+      children: {
+        shape: "circle",
+        radius: { 5: 0 },
+        fill: [ "red", "deeppink", "purple" ],
+        duration: 1500,
+        easing: "sin.out"
+      }
+    });
+
+    // Heartbeat function
+    function heartbeat() {
+      new mojs.Html({
+        el: heart,
+        scale: { 1: 1.5 },
+        duration: 400,
+        easing: "sin.inout",
+        onComplete: () => {
+          new mojs.Html({
+            el: heart,
+            scale: { 1.5: 1 },
+            duration: 400,
+            easing: "sin.inout"
+          }).play();
+        }
+      }).play();
+
+      burst.replay();
+    }
+
+    // Run heartbeat every 1.5s
+    setInterval(heartbeat, 1500);
+  </script>
+</body>
+</html>
